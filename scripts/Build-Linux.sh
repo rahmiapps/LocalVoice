@@ -3,18 +3,25 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-# Windows ZIP extraction and GitHub uploads do not always preserve Linux
-# executable bits. Invoke helper scripts explicitly through bash.
+# ZIP extraction and Windows Git clients may not preserve Linux executable bits.
 if [[ ! -x .venv-linux/bin/python ]]; then
   bash ./scripts/Setup-Linux.sh
 fi
 
 . .venv-linux/bin/activate
 
+python -m pip install --upgrade pip wheel setuptools
 python -m pip install -r requirements-build.txt
 python -m pip check
 PYTHONPATH=. python scripts/Run-Checks.py
-python -m pip_audit -r requirements.txt --progress-spinner off
+
+# Argos Translate 1.11.0 currently requires stanza==1.10.1 exactly.
+# PYSEC-2026-3075 cannot be upgraded independently without breaking Argos.
+# The exception is explicit and limited to that transitive dependency.
+python -m pip_audit \
+  -r requirements.txt \
+  --progress-spinner off \
+  --ignore-vuln PYSEC-2026-3075
 
 rm -rf build dist release/linux
 
@@ -35,25 +42,19 @@ mkdir -p \
   release/linux/AppDir/usr/share/icons/hicolor/scalable/apps
 
 cp -a dist/LocalVoice/. release/linux/AppDir/usr/bin/LocalVoice/
-cp installer/linux/localvoice.desktop \
-  release/linux/AppDir/usr/share/applications/
-cp resources/localvoice.svg \
-  release/linux/AppDir/usr/share/icons/hicolor/scalable/apps/localvoice.svg
+cp installer/linux/localvoice.desktop release/linux/AppDir/usr/share/applications/
+cp resources/localvoice.svg release/linux/AppDir/usr/share/icons/hicolor/scalable/apps/localvoice.svg
 cp installer/linux/AppRun release/linux/AppDir/AppRun
-
 chmod +x release/linux/AppDir/AppRun
 
-ln -sf usr/share/applications/localvoice.desktop \
-  release/linux/AppDir/localvoice.desktop
-ln -sf usr/share/icons/hicolor/scalable/apps/localvoice.svg \
-  release/linux/AppDir/localvoice.svg
+ln -sf usr/share/applications/localvoice.desktop release/linux/AppDir/localvoice.desktop
+ln -sf usr/share/icons/hicolor/scalable/apps/localvoice.svg release/linux/AppDir/localvoice.svg
 
 tar -C release/linux/AppDir/usr/bin \
   -czf release/linux/LocalVoice-Linux-x64-Portable.tar.gz \
   LocalVoice
 
 APPIMAGE_TOOL="$(command -v appimagetool || true)"
-
 if [[ -z "$APPIMAGE_TOOL" ]]; then
   APPIMAGE_TOOL="$PWD/.tools/appimagetool"
   bash ./scripts/Install-AppImageTool.sh "$APPIMAGE_TOOL"
