@@ -1,0 +1,17 @@
+LOCALVOICE 2.1.1 – WINDOWS EXE UND INSTALLER ERSTELLEN
+
+1. ZIP vollständig entpacken.
+2. PowerShell direkt im Projektordner öffnen.
+3. Ausführen:
+
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\Build-Windows.ps1
+
+Portable App:
+dist\LocalVoice\LocalVoice.exe
+
+Windows-Installer:
+release\windows\LocalVoice-Setup-Windows-x64.exe
+
+WICHTIG:
+Endnutzer brauchen keinen PowerShell-Sprachbefehl. Beim ersten Start beziehungsweise bei einer alten unsicheren Sprachbestätigung erscheint die Sprachauswahl vor dem Hauptfenster.
