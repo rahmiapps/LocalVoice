@@ -17,7 +17,7 @@ mkdir -p \
 
 cat > "$PKG/DEBIAN/control" <<EOF
 Package: localvoice
-Version: ${VERSION}
+Version: 2.1.1
 Section: utils
 Priority: optional
 Architecture: ${ARCH}
