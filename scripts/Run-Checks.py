@@ -113,13 +113,13 @@ if "_discard_unverified_managed_model(target)" not in (ROOT / "localvoice/core/t
 ui_locale_source = (ROOT / "localvoice/core/ui_locale.py").read_text(encoding="utf-8")
 settings_source = (ROOT / "localvoice/core/settings.py").read_text(encoding="utf-8")
 language_fix_source = (ROOT / "scripts/Fix-Language-Windows.ps1").read_text(encoding="utf-8")
-if "LOCALE_FILE_SCHEMA = 4" not in ui_locale_source or "confirmation_generation" not in ui_locale_source:
-    raise SystemExit("Durable UI-language confirmation schema 4 is missing.")
+if "LOCALE_FILE_SCHEMA = 3" not in ui_locale_source or "confirmation_generation" not in ui_locale_source:
+    raise SystemExit("Durable UI-language confirmation schema 3 is missing.")
 if "data.get(\"schema_version\") != LOCALE_FILE_SCHEMA" not in ui_locale_source:
     raise SystemExit("Legacy poisoned locale records are not rejected.")
-if "CURRENT_SCHEMA_VERSION = 10" not in settings_source:
+if "CURRENT_SCHEMA_VERSION = 9" not in settings_source:
     raise SystemExit("Settings language-repair migration version is missing.")
-if "confirmation_generation = 4" not in language_fix_source:
+if "confirmation_generation = 3" not in language_fix_source:
     raise SystemExit("Windows non-destructive language repair script is outdated.")
 
 from localvoice.core.languages import SUPPORTED_SPEECH_LANGUAGE_CODES  # noqa: E402

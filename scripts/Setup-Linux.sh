@@ -8,7 +8,8 @@ if sys.version_info[:2] not in {(3, 11), (3, 12)}:
     raise SystemExit("LocalVoice requires Python 3.11 or 3.12.")
 PY
 if command -v apt-get >/dev/null; then
-  echo "Required system packages on Debian/Ubuntu: libportaudio2 libxcb-xinerama0 libxcb-cursor0 libxkbcommon-x11-0 libgl1"
+  echo "Debian/Ubuntu dependencies are expected to be installed by GitHub Actions or the user:"
+  echo "python3-venv portaudio19-dev libportaudio2 libasound2-dev libxcb-xinerama0 libxcb-cursor0 libxkbcommon-x11-0 libgl1 libegl1 libdbus-1-3 desktop-file-utils patchelf fakeroot dpkg-dev zsync file"
 fi
 rm -rf .venv-linux
 python3 -m venv .venv-linux

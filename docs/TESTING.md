@@ -1,4 +1,4 @@
-# LocalVoice 2.1.1 – verbindlicher Testplan vor Veröffentlichung
+# LocalVoice 2.0.0 – verbindlicher Testplan vor Veröffentlichung
 
 ## Automatische Quellprüfung
 

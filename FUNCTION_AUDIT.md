@@ -1,4 +1,4 @@
-# LocalVoice 2.1.1 – Funktionsaudit
+# LocalVoice 2.0.0 – Funktionsaudit
 
 ## Sprachstart und Neuinstallation
 
@@ -11,6 +11,6 @@
 
 Die übrigen Funktionen des vollständigen 1.8.0-Funktionsumfangs bleiben enthalten.
 
-## Branding 2.1.1
+## Branding 2.0.0
 
 Das Logo ist an App-, Installer-, Desktop-, Startmenü-, Tray-, Seitenleisten- und Dashboard-Stellen verdrahtet. Automatische Tests prüfen alle erforderlichen Assets und Verweise.

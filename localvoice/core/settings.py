@@ -20,7 +20,7 @@ class SettingsStore:
     """
 
     MAX_SETTINGS_BYTES = 2 * 1024 * 1024
-    CURRENT_SCHEMA_VERSION = 10
+    CURRENT_SCHEMA_VERSION = 9
 
     def __init__(
         self,

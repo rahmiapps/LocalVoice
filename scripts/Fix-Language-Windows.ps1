@@ -56,8 +56,8 @@ $settingsTmp = "$settingsPath.tmp"
 Move-Item $settingsTmp $settingsPath -Force
 
 $locale = [ordered]@{
-    schema_version = 4
-    confirmation_generation = 4
+    schema_version = 3
+    confirmation_generation = 3
     confirmation_source = 'explicit-user-choice'
     ui_language = $Language
     confirmed = $true

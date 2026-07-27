@@ -1,4 +1,4 @@
-# Vollständige Anforderungszuordnung 2.1.1
+# Vollständige Anforderungszuordnung 2.0.0
 
 | Anforderung | Umsetzung | Hauptstellen | aktueller Prüfstatus |
 |---|---|---|---|

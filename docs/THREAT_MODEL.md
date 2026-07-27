@@ -1,4 +1,4 @@
-# LocalVoice 2.1.1 – Bedrohungsmodell
+# LocalVoice 2.0.0 – Bedrohungsmodell
 
 ## Schutzwerte
 

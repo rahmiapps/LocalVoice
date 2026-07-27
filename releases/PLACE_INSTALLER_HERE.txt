@@ -1,4 +1,0 @@
-Do not commit release installers into Git history.
-
-Upload the final EXE, portable ZIP, Linux packages and SHA256SUMS.txt to GitHub Releases.
-See docs/RELEASING.md.

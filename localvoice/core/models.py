@@ -45,7 +45,7 @@ def _as_bool(value: Any, default: bool) -> bool:
 
 @dataclass(slots=True)
 class AppSettings:
-    settings_schema_version: int = 10
+    settings_schema_version: int = 8
     ui_language: str = "de"
     ui_language_confirmed: bool = False
     theme: str = "dark"

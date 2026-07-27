@@ -1,4 +1,4 @@
-# LocalVoice – vollständiger Funktionsumfang 2.1.1
+# LocalVoice – vollständiger Funktionsumfang 2.0.0
 
 ## Grundprinzip
 

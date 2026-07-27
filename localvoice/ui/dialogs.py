@@ -17,7 +17,6 @@ from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QFileDialog,
     QFormLayout,
-    QGridLayout,
     QFrame,
     QHBoxLayout,
     QHeaderView,
@@ -531,96 +530,6 @@ class MicrophoneTestDialog(QDialog):
         event.accept()
 
 
-class LanguageSelectionDialog(QDialog):
-    """Dedicated pre-window language chooser with direct, explicit choices.
-
-    The selected language is persisted immediately when its button is clicked.
-    No combo-box index, cached signal state, system locale, or previous setting
-    can silently change the user's explicit choice.
-    """
-
-    _OPTIONS = (
-        ("Deutsch", "de"),
-        ("English", "en"),
-        ("Français", "fr"),
-        ("Italiano", "it"),
-        ("Español", "es"),
-        ("简体中文", "zh"),
-    )
-
-    def __init__(self, store: SettingsStore, parent=None) -> None:
-        super().__init__(parent)
-        self.store = store
-        self.selected_language = ""
-        self.setWindowTitle("LocalVoice · Language")
-        self.setModal(True)
-        self.setMinimumSize(620, 430)
-
-        root = QVBoxLayout(self)
-        root.setContentsMargins(36, 32, 36, 30)
-        root.setSpacing(18)
-
-        title = QLabel("Choose your language · Sprache auswählen")
-        title.setObjectName("PageTitle")
-        title.setAlignment(Qt.AlignCenter)
-        root.addWidget(title)
-
-        subtitle = QLabel(
-            "Select the language for the entire LocalVoice interface.\n"
-            "Wähle die Sprache für die gesamte LocalVoice-Oberfläche."
-        )
-        subtitle.setObjectName("Muted")
-        subtitle.setAlignment(Qt.AlignCenter)
-        subtitle.setWordWrap(True)
-        root.addWidget(subtitle)
-
-        grid = QGridLayout()
-        grid.setHorizontalSpacing(14)
-        grid.setVerticalSpacing(14)
-        preferred = self.store.system_language
-        for index, (label, code) in enumerate(self._OPTIONS):
-            button = QPushButton(label)
-            button.setMinimumHeight(62)
-            button.setProperty("languageCode", code)
-            if code == preferred:
-                button.setObjectName("Primary")
-                button.setText(f"✓  {label}")
-            button.clicked.connect(lambda _checked=False, value=code: self._choose(value))
-            grid.addWidget(button, index // 2, index % 2)
-        root.addLayout(grid)
-
-        note = QLabel(
-            "You can change this later in Settings. · "
-            "Du kannst diese Auswahl später in den Einstellungen ändern."
-        )
-        note.setObjectName("Muted")
-        note.setAlignment(Qt.AlignCenter)
-        note.setWordWrap(True)
-        root.addWidget(note)
-
-    def _choose(self, language: str) -> None:
-        if language not in LANGUAGES:
-            return
-        try:
-            self.store.confirm_ui_language(language)
-            if (
-                self.store.current.ui_language != language
-                or not self.store.current.ui_language_confirmed
-                or self.store.locale_store.load_confirmed() != language
-            ):
-                raise OSError("The selected language could not be verified.")
-        except (OSError, ValueError) as exc:
-            QMessageBox.critical(self, "LocalVoice", str(exc))
-            return
-        self.selected_language = language
-        self.accept()
-
-    def reject(self) -> None:
-        # Closing the chooser exits startup; never continue with an unconfirmed
-        # or guessed language.
-        super().reject()
-
-
 class OnboardingDialog(QDialog):
     def __init__(self, store: SettingsStore, parent=None) -> None:
         super().__init__(parent)
@@ -669,13 +578,18 @@ class OnboardingDialog(QDialog):
         return page, layout
 
     def _build_pages(self) -> None:
-        # Language is selected and verified in LanguageSelectionDialog before
-        # onboarding starts. Keep an internal data-backed combo only so the
-        # existing commit path remains compatible; it is never shown or changed.
+        page, layout = self._page("first_language_title", "first_language_text")
         self.ui_language_combo = combo_with_items(
             [(name, code) for code, name in LANGUAGES.items()],
             self._selected_ui_language,
         )
+        # Keep the cached language in sync for live button translations, but
+        # the final persisted value is always read directly from currentData().
+        # This avoids stale signal/index state on Windows and in frozen builds.
+        self.ui_language_combo.currentIndexChanged.connect(self._language_changed)
+        layout.addWidget(self.ui_language_combo)
+        layout.addStretch(1)
+        self.pages.addWidget(page)
 
         page, layout = self._page("onboarding_privacy_title", "onboarding_privacy_text")
         privacy_card = QFrame()
@@ -1166,16 +1080,7 @@ class SettingsDialog(QDialog):
         if secondary and primary == secondary:
             QMessageBox.warning(self, tr(self.language, "error"), tr(self.language, "hotkey_conflict"))
             return
-        # Do not block unrelated setting changes (for example switching the UI
-        # language) because of a pre-existing profile hotkey conflict.  A
-        # conflict is validated only when the user actually changes a global
-        # hotkey or enables automatic application-profile switching.
-        original_primary = normalize_hotkey(self.settings.hotkey, default="")
-        original_secondary = normalize_hotkey(self.settings.secondary_hotkey, default="") if self.settings.secondary_hotkey else ""
-        hotkeys_changed = primary != original_primary or secondary != original_secondary
-        profile_switching_enabled_now = self.auto_profile.isChecked()
-        profile_switching_just_enabled = profile_switching_enabled_now and not self.settings.auto_profile_switching
-        if self.database is not None and (hotkeys_changed or profile_switching_just_enabled):
+        if self.database is not None:
             values = [primary, secondary]
             for profile in self.database.list_profiles():
                 if profile.enabled:

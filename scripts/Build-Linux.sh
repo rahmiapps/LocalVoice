@@ -42,6 +42,8 @@ mkdir -p \
   release/linux/AppDir/usr/share/icons/hicolor/scalable/apps
 
 cp -a dist/LocalVoice/. release/linux/AppDir/usr/bin/LocalVoice/
+test -f installer/linux/localvoice.desktop || { echo "Missing installer/linux/localvoice.desktop" >&2; exit 1; }
+test -f installer/linux/AppRun || { echo "Missing installer/linux/AppRun" >&2; exit 1; }
 cp installer/linux/localvoice.desktop release/linux/AppDir/usr/share/applications/
 cp resources/localvoice.svg release/linux/AppDir/usr/share/icons/hicolor/scalable/apps/localvoice.svg
 cp installer/linux/AppRun release/linux/AppDir/AppRun

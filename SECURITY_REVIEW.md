@@ -1,4 +1,4 @@
-# LocalVoice 2.1.1 – Sicherheitsprüfung
+# LocalVoice 2.0.0 – Sicherheitsprüfung
 
 - Sprachcodes werden ausschließlich über eine feste Allowlist akzeptiert.
 - Alte, potentiell vergiftete Sprachbestätigungen werden nicht vertraut.
@@ -9,6 +9,6 @@
 
 Eine absolute Sicherheitsgarantie ist nicht möglich; native Installer-, Mikrofon- und Desktopintegration müssen zusätzlich auf echten Zielsystemen getestet werden.
 
-## Branding-Assets 2.1.1
+## Branding-Assets 2.0.0
 
 Alle eingebundenen Bilddateien sind lokale statische Ressourcen. Es werden keine externen URLs, Skripte oder dynamisch geladenen Bildinhalte verwendet.

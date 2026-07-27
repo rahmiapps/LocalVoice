@@ -1,4 +1,4 @@
-# LocalVoice 2.1.1 – Architektur
+# LocalVoice 2.0.0 – Architektur
 
 ## Oberfläche
 

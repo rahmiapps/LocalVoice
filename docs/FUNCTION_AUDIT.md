@@ -1,4 +1,4 @@
-# LocalVoice 2.1.1 – Funktionsaudit
+# LocalVoice 2.0.0 – Funktionsaudit
 
 ## Aufnahme und Audio
 

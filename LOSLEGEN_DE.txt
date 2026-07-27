@@ -1,4 +1,4 @@
-LOCALVOICE 2.1.1 – WINDOWS EXE UND INSTALLER ERSTELLEN
+LOCALVOICE 2.0.0 – WINDOWS EXE UND INSTALLER ERSTELLEN
 
 1. ZIP vollständig entpacken.
 2. PowerShell direkt im Projektordner öffnen.

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=LocalVoice
+Comment=Private offline speech-to-text and translation
+Exec=LocalVoice/LocalVoice
+Icon=localvoice
+Categories=Utility;AudioVideo;Audio;
+Terminal=false
+StartupNotify=true
+StartupWMClass=LocalVoice

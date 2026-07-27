@@ -1,6 +1,6 @@
 # LocalVoice – Änderungsverlauf
 
-## 2.1.1 – 2026-07-27
+## 2.0.0 – 2026-07-27
 
 - Neues LocalVoice-Logo vollständig in App, EXE, Taskleiste, Tray, Installer, Desktop-/Startmenü-Verknüpfungen und Linux-Pakete integriert.
 - Das LV-Platzhalterbild in der Seitenleiste wurde durch das echte Logo ersetzt.

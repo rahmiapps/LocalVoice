@@ -13,8 +13,8 @@ from .validation import SUPPORTED_UI_LANGUAGES
 
 
 DEFAULT_UI_LANGUAGE = "en"
-LOCALE_FILE_SCHEMA = 4
-LANGUAGE_CONFIRMATION_GENERATION = 4
+LOCALE_FILE_SCHEMA = 3
+LANGUAGE_CONFIRMATION_GENERATION = 3
 
 
 def normalize_ui_language(value: Any, default: str = DEFAULT_UI_LANGUAGE) -> str:
@@ -111,7 +111,7 @@ class UiLocaleStore:
                 return ""
             # All records from builds before 1.9.0 are intentionally untrusted,
             # because earlier release candidates could confirm the wrong language.
-            # Schema/generation 4 is written only after the new pre-window chooser.
+            # Schema/generation 3 is written only after the new pre-window chooser.
             if data.get("schema_version") != LOCALE_FILE_SCHEMA:
                 return ""
             if data.get("confirmation_generation") != LANGUAGE_CONFIRMATION_GENERATION:

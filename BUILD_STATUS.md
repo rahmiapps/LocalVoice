@@ -1,4 +1,4 @@
-# LocalVoice 2.1.1 – Build- und Prüfstatus
+# LocalVoice 2.0.0 – Build- und Prüfstatus
 
 ## Veröffentlichungsreife Sprachinitialisierung
 
@@ -25,7 +25,7 @@
 
 Der Buildprozess führt zusätzlich den nativen Paket-Smoke-Test aus. Vor Veröffentlichung sollte der fertige Installer auf einem sauberen Windows-Benutzerkonto einmal in jeder der sechs Sprachen durchgeklickt werden.
 
-## Branding-Integration 2.1.1
+## Branding-Integration 2.0.0
 
 - Neues Original-Logo als Multi-Resolution-Windows-ICO, PNG und Linux-SVG eingebunden.
 - App-Fenster, Taskleiste, System-Tray, EXE, Desktop- und Startmenü-Verknüpfungen verwenden das neue Logo.

@@ -112,7 +112,7 @@ def test_poisoned_legacy_locale_record_is_never_trusted(tmp_path: Path) -> None:
     assert store.current.model_size == "medium"
 
 
-def test_schema_four_explicit_choice_is_trusted_after_reinstall(tmp_path: Path) -> None:
+def test_schema_three_explicit_choice_is_trusted_after_reinstall(tmp_path: Path) -> None:
     path = tmp_path / "settings.json"
     locale_path = tmp_path / "ui-locale.json"
     path.write_text(json.dumps({
@@ -130,7 +130,7 @@ def test_schema_four_explicit_choice_is_trusted_after_reinstall(tmp_path: Path) 
 
 def test_language_fix_script_writes_new_confirmation_schema() -> None:
     source = Path("scripts/Fix-Language-Windows.ps1").read_text(encoding="utf-8")
-    assert "confirmation_generation = 4" in source
+    assert "confirmation_generation = 3" in source
     assert "confirmation_source = 'explicit-user-choice'" in source
     assert "ui_language_confirmed' $true" in source
 
@@ -164,41 +164,3 @@ def test_language_choice_happens_before_main_window_construction() -> None:
     chooser = source.index("onboarding = OnboardingDialog(store, None)")
     window = source.index("window = MainWindow(")
     assert chooser < window
-
-
-def test_dedicated_language_chooser_uses_direct_buttons_and_verifies_choice() -> None:
-    source = Path("localvoice/ui/dialogs.py").read_text(encoding="utf-8")
-    assert "class LanguageSelectionDialog" in source
-    assert "button.clicked.connect" in source
-    assert "self.store.confirm_ui_language(language)" in source
-    assert "self.store.locale_store.load_confirmed() != language" in source
-
-
-def test_language_chooser_runs_before_onboarding_and_main_window() -> None:
-    source = Path("localvoice/app.py").read_text(encoding="utf-8")
-    chooser = source.index("language_dialog = LanguageSelectionDialog")
-    onboarding = source.index("onboarding = OnboardingDialog")
-    window = source.index("window = MainWindow(")
-    assert chooser < onboarding < window
-
-
-def test_generation_three_confirmation_is_rejected_for_21_migration(tmp_path: Path) -> None:
-    path = tmp_path / "settings.json"
-    locale_path = tmp_path / "ui-locale.json"
-    path.write_text(json.dumps({
-        "settings_schema_version": 9,
-        "ui_language": "zh",
-        "ui_language_confirmed": True,
-        "first_run_complete": True,
-    }), encoding="utf-8")
-    locale_path.write_text(json.dumps({
-        "schema_version": 3,
-        "confirmation_generation": 3,
-        "confirmation_source": "explicit-user-choice",
-        "ui_language": "zh",
-        "confirmed": True,
-    }), encoding="utf-8")
-    store = SettingsStore(path, system_language="de-DE", locale_path=locale_path)
-    assert store.current.ui_language == "de"
-    assert store.current.ui_language_confirmed is False
-    assert store.current.first_run_complete is False

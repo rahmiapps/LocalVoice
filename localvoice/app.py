@@ -23,7 +23,7 @@ from localvoice.core.single_instance import InstanceCommandServer, SingleInstanc
 from localvoice.core.transcription import WhisperEngine
 from localvoice.core.translation import LocalTranslator
 from localvoice.core.system import TextInjector
-from localvoice.ui.dialogs import LanguageSelectionDialog, ModelManagerDialog, OnboardingDialog, PinDialog
+from localvoice.ui.dialogs import ModelManagerDialog, OnboardingDialog, PinDialog
 from localvoice.ui.main_window import MainWindow
 from localvoice.ui.theme import stylesheet
 
@@ -176,17 +176,11 @@ def main() -> int:
     icon = QIcon(str(resource_path("resources/localvoice.png")))
     app.setWindowIcon(icon)
 
-    # A dedicated chooser runs before every other language-dependent window.
-    # Old confirmations are invalidated by generation 4, so upgrades get one
-    # clean explicit choice. Startup never continues with a guessed language.
-    if store.needs_language_confirmation:
-        language_dialog = LanguageSelectionDialog(store, None)
-        if language_dialog.exec() != LanguageSelectionDialog.Accepted:
-            return 0
-        app.setStyleSheet(stylesheet(store.current.theme, store.current.ui_size))
-
+    # Language selection must happen before constructing the main window or any
+    # language-dependent application UI. This guarantees that a stale setting
+    # can never flash or leave the application in the wrong language.
     onboarding_completed_now = False
-    if not store.current.first_run_complete:
+    if not store.current.first_run_complete or store.needs_language_confirmation:
         onboarding = OnboardingDialog(store, None)
         if onboarding.exec() != OnboardingDialog.Accepted:
             return 0

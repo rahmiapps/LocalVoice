@@ -120,7 +120,7 @@ def test_pre_15_large_ui_is_migrated_once_to_new_medium(tmp_path: Path) -> None:
     path.write_text('{"ui_language":"de","ui_size":"large","settings_schema_version":4}', encoding="utf-8")
     store = SettingsStore(path)
     assert store.current.ui_size == "medium"
-    assert store.current.settings_schema_version == 10
+    assert store.current.settings_schema_version == 9
     store.current.ui_size = "large"
     store.save()
     reloaded = SettingsStore(path, system_language="de-DE")
