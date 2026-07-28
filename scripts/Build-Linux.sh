@@ -99,10 +99,11 @@ while IFS= read -r -d '' file; do
 done < <(find release/linux -maxdepth 1 -type f \
   \( -name '*.AppImage' -o -name '*.deb' -o -name '*.tar.gz' \) -print0)
 
-find release/linux -maxdepth 1 -type f \
-  \( -name '*.AppImage' -o -name '*.deb' -o -name '*.tar.gz' -o -name '*.txt' \) \
-  ! -name SHA256SUMS-Linux.txt \
-  -print0 | sort -z | xargs -0 sha256sum | sed 's#  release/linux/#  #' \
+sha256sum \
+  release/linux/LocalVoice-Linux-amd64.deb \
+  release/linux/LocalVoice-Linux-x64-Portable.tar.gz \
+  release/linux/LocalVoice-Linux-x86_64.AppImage \
+  | sed 's#  release/linux/#  #' \
   > release/linux/SHA256SUMS-Linux.txt
 
 echo "Slim Linux release created in release/linux"
