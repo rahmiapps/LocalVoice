@@ -103,7 +103,10 @@ if "MAX_BYTES=$((1800 * 1024 * 1024))" not in linux_build:
     raise SystemExit("The Linux release must enforce the GitHub file-size safety limit.")
 if "requirements-linux-runtime.txt" not in linux_build:
     raise SystemExit("The Linux bootstrap runtime requirements are missing from the package build.")
-if "release/linux/AppDir" in workflow or "release/linux/*" in workflow:
+if "release/linux/AppDir" in workflow or re.search(
+    r"(?m)^\s*(?:-\s*)?release/linux/\*\s*$",
+    workflow,
+):
     raise SystemExit("GitHub Actions must upload only final Linux files, never AppDir or wildcard directories.")
 
 if "pynput.keyboard._dummy" not in (ROOT / "LocalVoice.spec").read_text(encoding="utf-8"):
