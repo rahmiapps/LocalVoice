@@ -25,9 +25,9 @@ jobs:
         with:
           name: LocalVoice-Windows
           path: |
-            release/windows/*.exe
-            release/windows/*.zip
-            release/windows/*.txt
+            release/windows/LocalVoice-Setup-Windows-x64.exe
+            release/windows/LocalVoice-Windows-x64-Portable.zip
+            release/windows/SHA256SUMS-Windows.txt
           if-no-files-found: error
 
   linux:
@@ -66,8 +66,8 @@ jobs:
         with:
           name: LocalVoice-Linux
           path: |
-            release/linux/*.AppImage
-            release/linux/*.deb
-            release/linux/*.tar.gz
-            release/linux/*.txt
+            release/linux/LocalVoice-Linux-x86_64.AppImage
+            release/linux/LocalVoice-Linux-amd64.deb
+            release/linux/LocalVoice-Linux-x64-Portable.tar.gz
+            release/linux/SHA256SUMS-Linux.txt
           if-no-files-found: error

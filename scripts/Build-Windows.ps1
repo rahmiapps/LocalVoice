@@ -116,14 +116,14 @@ if ($SignTool -and $Thumbprint) {
         -Encoding UTF8
 
 Get-ChildItem $Release -File |
-    Where-Object { $_.Name -ne "SHA256SUMS.txt" } |
+    Where-Object { $_.Name -in @("LocalVoice-Setup-Windows-x64.exe", "LocalVoice-Windows-x64-Portable.zip") } |
     Sort-Object Name |
     ForEach-Object {
         $Hash = Get-FileHash $_.FullName -Algorithm SHA256
         "$($Hash.Hash.ToLower())  $($_.Name)"
     } |
     Set-Content `
-        (Join-Path $Release "SHA256SUMS.txt") `
+        (Join-Path $Release "SHA256SUMS-Windows.txt") `
         -Encoding ASCII
 
 Write-Host "Windows release created in $Release" -ForegroundColor Green

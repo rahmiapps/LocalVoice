@@ -101,8 +101,8 @@ done < <(find release/linux -maxdepth 1 -type f \
 
 find release/linux -maxdepth 1 -type f \
   \( -name '*.AppImage' -o -name '*.deb' -o -name '*.tar.gz' -o -name '*.txt' \) \
-  ! -name SHA256SUMS.txt \
+  ! -name SHA256SUMS-Linux.txt \
   -print0 | sort -z | xargs -0 sha256sum | sed 's#  release/linux/#  #' \
-  > release/linux/SHA256SUMS.txt
+  > release/linux/SHA256SUMS-Linux.txt
 
 echo "Slim Linux release created in release/linux"
