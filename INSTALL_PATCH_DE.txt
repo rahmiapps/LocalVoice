@@ -1,0 +1,16 @@
+LocalVoice Slim-Linux-Patch 2.1.1
+
+Kopiere den gesamten Inhalt dieses Ordners in deinen echten Ordner LocalVoice-GitHub.
+Vorhandene Dateien ersetzen.
+
+Danach in PowerShell im Ordner LocalVoice-GitHub:
+
+git add .
+git commit -m "Build slim Linux packages with first-run private runtime"
+git push origin main
+
+Danach auf GitHub:
+Actions -> Build LocalVoice -> Run workflow -> main
+
+Der Linux-Artifact darf nur fertige AppImage-, DEB-, TAR.GZ- und TXT-Dateien enthalten.
+AppDir wird nicht mehr hochgeladen. Jede Paketdatei wird automatisch gegen ein Limit von 1,8 GiB geprüft.

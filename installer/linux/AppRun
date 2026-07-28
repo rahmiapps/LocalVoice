@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 HERE="$(cd "$(dirname "$0")" && pwd)"
-exec "$HERE/usr/bin/LocalVoice/LocalVoice" "$@"
+export LOCALVOICE_APP_ROOT="$HERE/usr/share/localvoice/app"
+exec "$HERE/usr/lib/localvoice/bootstrap-localvoice.sh" "$@"

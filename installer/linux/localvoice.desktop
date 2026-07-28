@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=LocalVoice
-Comment=Private offline speech-to-text and translation
-Exec=LocalVoice/LocalVoice
+Comment=Private offline speech-to-text and local translation
+Exec=localvoice
 Icon=localvoice
 Categories=Utility;AudioVideo;Audio;
 Terminal=false

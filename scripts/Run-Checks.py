@@ -92,21 +92,36 @@ for action in ("actions/checkout@v7", "actions/setup-python@v7", "actions/upload
         raise SystemExit(f"Expected reviewed GitHub Action version is missing: {action}")
 
 if "--package-smoke-test" not in windows_build or "--package-smoke-test" not in linux_build:
-    raise SystemExit("Native build scripts must execute the frozen package smoke test.")
+    raise SystemExit("Windows and Linux build scripts must execute the package smoke test.")
 if "https://timestamp.digicert.com" not in windows_build:
     raise SystemExit("Windows signing must use an HTTPS timestamp endpoint.")
 if "APPIMAGE_EXTRACT_AND_RUN=1" not in linux_build:
     raise SystemExit("Linux AppImage build must not require a FUSE mount in CI.")
+if "python -m PyInstaller" in linux_build:
+    raise SystemExit("The slim Linux release must not bundle the multi-gigabyte Python runtime with PyInstaller.")
+if "MAX_BYTES=$((1800 * 1024 * 1024))" not in linux_build:
+    raise SystemExit("The Linux release must enforce the GitHub file-size safety limit.")
+if "requirements-linux-runtime.txt" not in linux_build:
+    raise SystemExit("The Linux bootstrap runtime requirements are missing from the package build.")
+if "release/linux/AppDir" in workflow or "release/linux/*" in workflow:
+    raise SystemExit("GitHub Actions must upload only final Linux files, never AppDir or wildcard directories.")
 
 if "pynput.keyboard._dummy" not in (ROOT / "LocalVoice.spec").read_text(encoding="utf-8"):
     raise SystemExit("The frozen application must include pynput's dummy backend for package smoke tests.")
 if "wtype" not in deb_text:
     raise SystemExit("The Debian package must recommend wtype for Wayland text insertion.")
 requirements = (ROOT / "requirements.txt").read_text(encoding="utf-8")
+linux_runtime_requirements = (ROOT / "requirements-linux-runtime.txt").read_text(encoding="utf-8")
 pyproject_text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 spec_text = (ROOT / "LocalVoice.spec").read_text(encoding="utf-8")
-if "dbus-next" not in requirements or "dbus-next" not in pyproject_text or "collect_submodules('dbus_next')" not in spec_text:
+if "dbus-next" not in requirements or "dbus-next" not in linux_runtime_requirements or "dbus-next" not in pyproject_text or "collect_submodules('dbus_next')" not in spec_text:
     raise SystemExit("The Wayland portal backend is missing from a release dependency or PyInstaller bundle.")
+for dependency in ("PySide6", "sounddevice", "faster-whisper", "argostranslate", "cryptography"):
+    if dependency not in linux_runtime_requirements:
+        raise SystemExit(f"Linux runtime dependency missing: {dependency}")
+bootstrap = (ROOT / "installer/linux/bootstrap-localvoice.sh").read_text(encoding="utf-8")
+if "linux-runtime" not in bootstrap or "python3 -m venv" not in bootstrap and "-m venv" not in bootstrap:
+    raise SystemExit("The Linux first-run private runtime bootstrap is incomplete.")
 if "_discard_unverified_managed_model(target)" not in (ROOT / "localvoice/core/transcription.py").read_text(encoding="utf-8"):
     raise SystemExit("Managed speech models must reject pre-existing unverified files.")
 
